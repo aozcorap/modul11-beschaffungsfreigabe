@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Modul 11 – Beschaffungsfreigabe optimiert</title>
+<style>
+:root{--bg:#eef1f5;--surface:#fff;--text:#14213a;--muted:#5a6678;--line:#d3dae4;--navy:#0b2545;--navy2:#13315c;--steel:#8da9c4;--accent:#0e7c86;--accent-bg:#e1f1f2;
+--red:#c62828;--red-bg:#fbe4e4;--red-text:#7a1414;--amb:#f2a900;--amb-bg:#fff2cc;--amb-text:#6b4a00;--grn:#2e7d32;--grn-bg:#e0f1e1;--grn-text:#17501b;--blu:#1f5fa8;--blu-bg:#e1ecf8;--blu-text:#123f73;--orange:#d2661e;--ink:#2b3445;--h2:#13315c;--alt:#13315c;--btn:#13315c;--btnh:#0b2545;--fon-bg:#13315c;--fon-c:#fff;--hdr1:#0b2545;--hdr2:#fff;--hdr-on:#0b2545;--hero1:#0b2545;--hero2:#13315c;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0d1420;--surface:#162033;--text:#e8edf5;--muted:#9aa8bc;--line:#2c3a52;--navy:#06101f;--navy2:#0f2342;--steel:#6d8cae;--accent:#4fc3cd;--accent-bg:#12333a;
+--red:#ef6b6b;--red-bg:#3a1a1c;--red-text:#f7c4c4;--amb:#ffc83d;--amb-bg:#3a2e0b;--amb-text:#ffe3a0;--grn:#6fcf76;--grn-bg:#15321a;--grn-text:#bde9c1;--blu:#6aa5ea;--blu-bg:#152a45;--blu-text:#bcd6f5;--orange:#f0955a;--ink:#cfd8e6;--h2:#fff;--alt:var(--steel);--btn:#27528a;--btnh:#1f4575;--fon-bg:var(--steel);--fon-c:#0d1420;--hdr1:#1b3f73;--hdr2:#18233a;--hdr-on:#ffffff;--hero1:#1b3f73;--hero2:#14305a}}
+:root[data-theme=dark]{--bg:#0d1420;--surface:#162033;--text:#e8edf5;--muted:#9aa8bc;--line:#2c3a52;--navy:#06101f;--navy2:#0f2342;--steel:#6d8cae;--accent:#4fc3cd;--accent-bg:#12333a;
+--red:#ef6b6b;--red-bg:#3a1a1c;--red-text:#f7c4c4;--amb:#ffc83d;--amb-bg:#3a2e0b;--amb-text:#ffe3a0;--grn:#6fcf76;--grn-bg:#15321a;--grn-text:#bde9c1;--blu:#6aa5ea;--blu-bg:#152a45;--blu-text:#bcd6f5;--orange:#f0955a;--ink:#cfd8e6;--h2:#fff;--alt:var(--steel);--btn:#27528a;--btnh:#1f4575;--fon-bg:var(--steel);--fon-c:#0d1420;--hdr1:#1b3f73;--hdr2:#18233a;--hdr-on:#ffffff;--hero1:#1b3f73;--hero2:#14305a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.panel{display:none;padding:24px 0 40px}
+.panel.on{display:block;animation:pin .35s ease}
+@keyframes pin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.ph h2{margin:0;font-size:26px;color:var(--h2)}
+.back{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer}
+.back:hover{border-color:var(--alt)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1.5px solid var(--alt);color:var(--alt);white-space:nowrap}
+.lead{color:var(--muted);margin:0 0 16px;max-width:820px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.hero{background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;border-radius:14px;padding:26px 28px;margin-bottom:14px}
+.hero h1{margin:0 0 6px;font-size:clamp(24px,3.4vw,34px);line-height:1.2}
+.hero p{margin:4px 0;opacity:.9;max-width:760px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:16px}
+.fact{background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px}
+.fact .n{font-size:28px;font-weight:700;line-height:1.1;display:block}
+.fact .l{font-size:12.5px;opacity:.85}
+.tile{text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--alt);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.tile:hover,.tile:focus-visible{transform:translateY(-3px);box-shadow:0 8px 18px rgba(11,37,69,.16);outline:none}
+.tile b{font-size:17px;display:block;margin-bottom:2px}
+.tile span.s{font-size:13.5px;color:var(--muted);display:block;margin-bottom:8px}
+.tile.t1{border-top-color:var(--red)}.tile.t2{border-top-color:var(--amb)}.tile.t3{border-top-color:var(--grn)}.tile.t4{border-top-color:var(--accent)}
+.glance{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;margin:14px 0}
+@media (max-width:760px){.glance{grid-template-columns:1fr}.glance .arr{display:none}}
+.glance .box{border-radius:12px;padding:14px 16px}
+.glance .ist{background:var(--red-bg);border:1px solid var(--red);color:var(--red-text)}
+.glance .soll{background:var(--grn-bg);border:1px solid var(--grn);color:var(--grn-text)}
+.glance .arr{align-self:center;font-size:30px;color:var(--alt)}
+.glance ul{margin:6px 0 0;padding-left:18px}
+.swim{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px}
+.swim svg{display:block;min-width:900px;width:100%;height:auto}
+.lane-bg{fill:var(--surface);stroke:var(--line)}.lane-bg.alt{fill:color-mix(in srgb,var(--blu-bg) 45%,var(--surface))}
+.lane-lbl{fill:var(--alt);font-size:13px;font-weight:700}
+.node{cursor:pointer;outline:none}
+.node .main{fill:var(--surface);stroke:var(--alt);stroke-width:2;transition:stroke-width .15s}
+.node .bar{fill:var(--alt)}
+.node text{fill:var(--text);font-size:12px;text-anchor:middle;pointer-events:none;font-weight:500}
+.node.red .main{fill:var(--red-bg);stroke:var(--red)}.node.red .bar{fill:var(--red)}.node.red text{fill:var(--red-text)}
+.node.yel .main{fill:var(--amb-bg);stroke:var(--amb)}.node.yel .bar{fill:var(--amb)}.node.yel text{fill:var(--amb-text)}
+.node.grn .main{fill:var(--grn-bg);stroke:var(--grn)}.node.grn .bar{fill:var(--grn)}.node.grn text{fill:var(--grn-text)}
+.node.blu .main{fill:var(--blu-bg);stroke:var(--blu)}.node.blu .bar{fill:var(--blu)}.node.blu text{fill:var(--blu-text)}
+.node.dsh .main{stroke-dasharray:6 4;stroke:var(--muted)}.node.dsh .bar{fill:var(--muted)}
+.node.dia .main{fill:var(--surface);stroke:var(--alt)}
+.node.dia.grn .main{fill:var(--grn-bg);stroke:var(--grn)}
+.node:hover .main,.node:focus-visible .main{stroke-width:3.5}
+.node.sel .main{stroke-width:4.5}
+.node{transition:transform .3s ease,opacity .3s ease;transform-box:fill-box;transform-origin:center}
+.node.act{transform:scale(1.16)}
+.node.act .main{stroke-width:5;filter:drop-shadow(0 0 8px var(--accent))}
+svg.playing .node:not(.act){opacity:.38}
+svg.playing .hintring{display:none}
+.prog{font-size:14px;font-weight:700;color:var(--alt);min-width:120px}
+.ring{fill:none;stroke:var(--red);stroke-width:3;opacity:0}
+.edge{fill:none;stroke-width:2.6}
+.edge.n{stroke:var(--ink)}.edge.o{stroke:var(--orange)}.edge.g{stroke:var(--grn)}.edge.b{stroke:var(--blu)}.edge.x{stroke:var(--muted);stroke-dasharray:6 5;stroke-width:2}
+.elab{fill:var(--muted);font-size:11.5px}.elab.o{fill:var(--orange);font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+.edge.anim{stroke-dasharray:9 6;animation:flow .8s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-15}}
+.blink{animation:blink 1s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.node{animation:ndin .5s ease backwards}
+@keyframes ndin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+.bar2{height:36px;border-radius:8px;background:var(--red-bg);border:1px solid var(--red);position:relative;overflow:hidden}
+.bar2 i{position:absolute;left:0;top:0;bottom:0;background:var(--grn);width:0;min-width:7px;transition:width 1.5s ease}
+.bar2.in i{width:1.04%}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.btn{font:inherit;font-size:14px;font-weight:600;background:var(--btn);color:#fff;border:0;border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn:hover{background:var(--btnh)}.btn.alt{background:var(--surface);color:var(--alt);border:1.5px solid var(--alt)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:5px;vertical-align:-2px;border:2px solid var(--line)}
+.sw.red{background:var(--red);border-color:var(--red)}.sw.yel{background:var(--amb);border-color:var(--amb)}.sw.grn{background:var(--grn);border-color:var(--grn)}.sw.blu{background:var(--blu);border-color:var(--blu)}.sw.dsh{border-style:dashed;border-color:var(--muted)}
+.ln{display:inline-block;width:22px;height:0;border-top:3px solid;margin-right:5px;vertical-align:3px}.ln.o{border-color:var(--orange)}.ln.g{border-color:var(--grn)}.ln.b{border-color:var(--blu)}
+.detail{margin-top:10px;border-left:6px solid var(--alt);min-height:92px}
+.detail h4{margin:0 0 4px;font-size:16px}.detail p{margin:3px 0;font-size:14.5px}.detail b{color:var(--alt)}
+.rag{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;color:#fff;white-space:nowrap}
+.rag.r{background:var(--red)}.rag.y{background:var(--amb);color:#2b2000}.rag.g{background:var(--grn)}.rag.n{background:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--btn);color:#fff;font-size:13px}
+tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto}
+.tg{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:6px;margin:0 4px 4px 0}
+.t-ent{background:var(--red-bg);color:var(--red-text)}.t-ver{background:var(--amb-bg);color:var(--amb-text)}.t-aut{background:var(--grn-bg);color:var(--grn-text)}.t-man{background:var(--blu-bg);color:var(--blu-text)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.filters button{font:inherit;font-size:13px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--alt);background:var(--surface);color:var(--alt);cursor:pointer;font-weight:600}
+.filters button.on{background:var(--fon-bg);color:var(--fon-c)}
+.order{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.order b{background:var(--btn);color:#fff;padding:3px 10px;border-radius:999px;font-weight:600}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:8px 0}
+details>summary{cursor:pointer;font-weight:600;padding:10px 14px;list-style:none;display:flex;align-items:center;gap:10px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸";color:var(--alt);transition:transform .2s;font-size:14px}
+details[open]>summary::before{transform:rotate(90deg)}
+details>.in{padding:2px 16px 12px 34px;font-size:14.5px}
+details>.in p{margin:6px 0}
+.ktiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.ktile{text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--accent);border-radius:12px;padding:12px 14px;cursor:pointer}
+.ktile:hover{box-shadow:0 6px 14px rgba(11,37,69,.14)}
+.ktile.sel{border-color:var(--alt);border-top-color:var(--alt);box-shadow:0 6px 14px rgba(11,37,69,.18)}
+.ktile .big{font-size:26px;font-weight:700;color:var(--h2);display:block;line-height:1.2}
+.ktile .l{font-size:13px;color:var(--muted)}
+.q{font-style:italic;border-left:3px solid var(--line);padding-left:12px;margin:8px 0;font-size:14px}
+.note{background:var(--amb-bg);color:var(--amb-text);border-radius:10px;padding:10px 14px;font-size:14px;margin-top:10px}
+ul.clean{margin:6px 0;padding-left:20px}
+
+.hint{display:flex;align-items:center;gap:10px;background:var(--accent-bg);color:var(--text);border:1px solid var(--accent);border-radius:10px;padding:8px 14px;font-size:14px;margin:0 0 10px}
+.hint i{width:12px;height:12px;border-radius:50%;background:var(--accent);flex:none}
+.hintring{fill:none;stroke:var(--accent);stroke-width:4;pointer-events:none}
+.msum{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--alt);border-radius:12px;padding:16px 18px;margin:14px 0}
+.msum h2{margin:0 0 2px;font-size:22px;color:var(--h2)}
+.msum .sub{color:var(--muted);font-size:14px;margin:0 0 12px}
+.msum .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.msum h3{margin:0 0 4px;font-size:14px;text-transform:none;color:var(--alt)}
+.msum p,.msum ul{margin:0;font-size:14.5px}.msum ul{padding-left:18px}
+.eyebrow{font-size:13px;letter-spacing:.4px;opacity:.85;margin:0 0 6px;font-weight:600}
+@media (prefers-reduced-motion:no-preference){.hintring{animation:hring 1.4s ease-out infinite;transform-box:fill-box;transform-origin:center}@keyframes hring{0%{opacity:.95;transform:scale(1)}100%{opacity:0;transform:scale(1.35)}}}
+
+.hdr1{background:var(--hdr1);color:#fff}
+.hdr1in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:22px;padding-bottom:22px;flex-wrap:wrap}
+.brand{background:none;border:0;color:#fff;font-family:inherit;text-align:left;cursor:pointer;padding:0}
+.brand .b1{display:block;font-size:26px;font-weight:700;letter-spacing:.2px;line-height:1.2}
+.brand .b2{display:block;font-size:15px;opacity:.85;margin-top:3px}
+.hmeta{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hmeta .m{font-size:13.5px;line-height:1.5;text-align:right;opacity:.92}
+.hmeta .m b{font-weight:600}
+.chipst{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.4px;background:var(--amb);color:#2b2000;border-radius:999px;padding:3px 11px;margin-left:6px}
+.theme{display:flex;gap:4px;background:rgba(255,255,255,.14);border-radius:12px;padding:4px}
+.theme button{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#fff;background:none;border:0;border-radius:9px;cursor:pointer}
+.theme button:hover{background:rgba(255,255,255,.18)}
+.theme button.on{background:#fff;color:var(--hdr1)}
+.theme svg{width:22px;height:22px}
+nav.hdr2{position:sticky;top:0;z-index:20;background:var(--hdr2);border-bottom:1px solid var(--line);box-shadow:0 3px 10px rgba(11,37,69,.10)}
+nav.hdr2 .wrap{display:flex;gap:2px;overflow-x:auto}
+nav.hdr2 button{font:inherit;font-size:15.5px;font-weight:500;color:var(--muted);background:none;border:0;padding:16px 12px 13px;cursor:pointer;border-bottom:4px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:9px}
+nav.hdr2 button svg{width:20px;height:20px;flex:none}
+nav.hdr2 button:hover{color:var(--text);background:var(--accent-bg)}
+nav.hdr2 button.on{color:var(--hdr-on);font-weight:700;border-bottom-color:var(--amb)}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px;padding:16px 0 28px}
+</style>
+</head>
+<body>
+<header class="hdr1"><div class="wrap hdr1in">
+<button class="brand" data-go="start" aria-label="Zur Übersicht"><span class="b1">Landwerk Institut gGmbH</span><span class="b2">Beschaffungsfreigabe optimiert · Management-Übersicht</span></button>
+<div class="hmeta"><div class="m"><b>Praxisprüfung Modul 11</b><span class="chipst">ENTWURF</span><br>Ahmet Özcorapci · KI-Werkzeug Claude · 06.11.2026</div><div class="theme" id="theme" role="group" aria-label="Darstellung"></div></div>
+</div></header>
+<nav class="hdr2" id="tabs" aria-label="Bereiche"><div class="wrap" id="tabsin"></div></nav>
+<main class="wrap">
+
+<section class="panel" id="p-start">
+<div class="hero">
+<p class="eyebrow">MANAGEMENT SUMMARY · LANDWERK INSTITUT gGmbH (GEMEINNÜTZIGE EINRICHTUNG, RUND 180 BESCHÄFTIGTE)</p>
+<h1>Der Beschaffungs-Freigabeprozess der Landwerk Institut gGmbH, optimiert</h1>
+<p>Vom Ist-Prozess über die Schwachstellen zum Soll-Prozess und den Kennzahlen. Eine Übung, es wird nichts real umgesetzt. Alle Angaben stammen aus dem Testszenario, Ergänzungen und Annahmen sind markiert.</p>
+<div class="facts">
+<div class="fact"><span class="n"><span data-count="9">0</span> Tage</span><span class="l">Arbeitstage im Schnitt von Antrag bis Freigabe</span></div>
+<div class="fact"><span class="n">≈ <span data-count="45">0</span> Min</span><span class="l">reine Bearbeitung, der Rest ist Liegezeit</span></div>
+<div class="fact"><span class="n">1 von 4</span><span class="l">Anträgen kommt mindestens einmal zurück</span></div>
+<div class="fact"><span class="n"><span data-count="180">0</span></span><span class="l">Beschäftigte der Einrichtung</span></div>
+</div></div>
+<div class="msum">
+<h2>Management Summary</h2>
+<p class="sub">Für die Geschäftsführung der Landwerk Institut gGmbH. Entwurf eines optimierten Soll-Prozesses, nichts ist eingeführt.</p>
+<div class="cols">
+<div><h3>Ausgangslage</h3><p>Eine Freigabe dauert im Schnitt 9 Arbeitstage, davon nur etwa 45 Minuten Bearbeitung. Jeder vierte Antrag kommt zurück, niemand sieht den Stand.</p></div>
+<div><h3>Empfehlung</h3><ul><li>Digitaler Antrag im vorhandenen Workflow-Tool mit Pflichtfeldern</li><li>Ausdruck, Hauspost und Scan entfallen</li><li>Teamleitung mit Frist und Erinnerung, Budget-Vorprüfung nach festen Regeln, Statusanzeige</li><li>Eine KI-Stelle (Kategorie der Begründung)</li></ul></div>
+<div><h3>Verantwortung bleibt beim Menschen</h3><p>Vier Kontrollpunkte. Anträge über 2.000 € genehmigt weiterhin die Geschäftsführung.</p></div>
+<div><h3>Erfolg und offene Entscheidungen</h3><p>Gemessen werden Durchlaufzeit, Bearbeitungsaufwand, Rückläuferquote und Zufriedenheit, immer zusammen gelesen. Offen: Zielwerte, Stundensatz, Zahl der Anträge, Kleinbeträge. Die Wirkung ist noch nicht gemessen.</p></div>
+</div></div>
+<div class="glance">
+<div class="box ist"><b>Heute (Ist)</b><ul><li>Papierkette: Word, Ausdruck, Hauspost, Scan, E-Mail</li><li>Antrag liegt im Fach der Teamleitung</li><li>Niemand sieht, wo ein Antrag steckt</li></ul></div>
+<div class="arr" aria-hidden="true">➜</div>
+<div class="box soll"><b>Künftig (Soll, Entwurf)</b><ul><li>Digitaler Antrag, Hauspost und Scan entfallen</li><li>Feste Regeln, eine KI-Stelle, vier menschliche Kontrollpunkte</li><li>Statusanzeige für alle Beteiligten</li></ul></div>
+</div>
+<div class="grid g4">
+<button class="tile t2" data-go="ist"><b>Ist-Prozess</b><span class="s">Swimlane mit 6 Schritten</span><span class="pill">✎ Fassung v1</span></button>
+<button class="tile t1" data-go="schwach"><b>Schwachstellen</b><span class="s">Ampel: was klemmt, was wird gelöst</span><span class="pill">✓ freigegeben</span></button>
+<button class="tile t3" data-go="opt"><b>Optimierung</b><span class="s">Entscheidung je Schritt</span><span class="pill">✓ Fassung v2</span></button>
+<button class="tile t2" data-go="soll"><b>Soll-Prozess</b><span class="s">Swimlane mit Kontrollpunkten</span><span class="pill">✎ Entwurf, Freigabe offen</span></button>
+<button class="tile t4" data-go="kpi"><b>Kennzahlen</b><span class="s">3 Kennzahlen, Fehlanreize, Vergleich</span><span class="pill">✓ freigegeben</span></button>
+<button class="tile" data-go="prompts"><b>Prompts und Entscheidungen</b><span class="s">So ist das Ergebnis entstanden</span><span class="pill">Wortlaut</span></button>
+<button class="tile t2" data-go="offen"><b>Annahmen und offene Punkte</b><span class="s">Was nicht im Szenario steht</span><span class="pill">markiert</span></button>
+</div>
+</section>
+
+<section class="panel" id="p-ist">
+<div class="ph"><h2>Ist-Prozess</h2><span><span class="pill">✎ Fassung v1, Annahmen markiert</span> <button class="back" data-go="start">← Übersicht</button></span></div>
+<div class="tools"><button class="btn" id="playIst">▶ Ablauf abspielen</button><span class="prog" id="prIst"></span><span class="legend"><span><i class="sw red"></i>kritisch (größte Schwachstelle)</span><span><i class="sw yel"></i>Schwachstelle</span><span><i class="ln o"></i>Medienbruch</span><span><i class="ln" style="border-color:var(--muted);border-top-style:dashed"></i>Rückweg oder nicht beschrieben</span></span></div>
+<div class="hint"><i></i><span><b>Tipp:</b> Alle Kästen und Rauten sind anklickbar. Die Details erscheinen unter dem Diagramm, als Beispiel ist Schritt 1 schon geöffnet. Oder starte oben den Ablauf.</span></div>
+<div class="swim"><svg id="svgIst" viewBox="0 0 1100 490" role="img" aria-label="Swimlane des Ist-Prozesses"></svg></div>
+<div class="card detail" id="detIst"><h4>Schritt anklicken</h4><p>Hier erscheinen Erklärung, Einordnung und der Bezug zum Chat.</p></div>
+</section>
+
+<section class="panel" id="p-schwach">
+<div class="ph"><h2>Schwachstellen-Ampel</h2><span><span class="pill">✓ freigegeben (Fassung v2)</span> <button class="back" data-go="start">← Übersicht</button></span></div>
+<p class="lead">Ahmet hat die vier größten ausgewählt und als Personal- oder Prozessproblem eingeordnet. Die rechte Spalte zeigt, was der Soll-Entwurf dagegen vorsieht. Die Wirkung ist noch nicht gemessen.</p>
+<div class="tw"><table>
+<thead><tr><th>Nr.</th><th>Schwachstelle</th><th>Einordnung</th><th>Heute</th><th>Maßnahme im Soll-Entwurf</th><th>Soll</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>Antrag liegt im Fach der Teamleitung</b><br><small>Liegezeit, größte Schwachstelle</small></td><td>Prozessproblem (Ahmet)</td><td><span class="rag r">kritisch</span></td><td>Digitale Benachrichtigung, feste Prüffrist, automatische Erinnerung</td><td><span class="rag g">adressiert</span></td></tr>
+<tr><td>2</td><td><b>Hauspost und Papierkette</b><br><small>Medienbruch</small></td><td>Prozessproblem (Einordnung von Claude)</td><td><span class="rag y">Schwachstelle</span></td><td>Ausdruck, Hauspost und Scan entfallen, digitale Weitergabe</td><td><span class="rag g">adressiert</span></td></tr>
+<tr><td>3</td><td><b>Alles hängt an der Teamleitung</b><br><small>Engpass (Person)</small></td><td>Personalproblem (Ahmet)</td><td><span class="rag r">kritisch</span></td><td>Prüfung bleibt beim Menschen. Frist und Erinnerung, Vertretung als Vorschlag</td><td><span class="rag y">gemildert</span></td></tr>
+<tr><td>4</td><td><b>Blackbox, niemand sieht den Stand</b></td><td>Prozessproblem (Ahmet)</td><td><span class="rag y">Schwachstelle</span></td><td>Statusanzeige für alle Beteiligten</td><td><span class="rag g">adressiert</span></td></tr>
+<tr><td>+</td><td><b>Jeder vierte Antrag kommt zurück</b><br><small>weitere Schwachstelle</small></td><td>nicht unter den größten</td><td><span class="rag y">Schwachstelle</span></td><td>Pflichtfelder, KI-Kategorie für die Begründung</td><td><span class="rag g">adressiert</span></td></tr>
+<tr><td>+</td><td><b>Kleinbeträge laufen den langen Weg</b><br><small>weitere Schwachstelle</small></td><td>nicht unter den größten</td><td><span class="rag y">Schwachstelle</span></td><td>Entscheidung offen, das Szenario nennt keine Grenze</td><td><span class="rag n">offen</span></td></tr>
+</tbody></table></div>
+<p class="legend" style="margin-top:8px"><span><span class="rag r">kritisch</span> größte Zeitursache</span><span><span class="rag y">Schwachstelle / gemildert</span></span><span><span class="rag g">adressiert</span></span><span>Die Spalte „Soll“ ist eine Einschätzung von Claude, keine Messung.</span></p>
+<div class="card" style="margin-top:14px"><b>Liegezeit statt Arbeit:</b> Von neun Arbeitstagen sind nur etwa 45 Minuten Bearbeitung, der Rest ist Liegezeit.
+<div class="bar2" id="bar" style="margin:10px 0 6px"><i></i></div>
+<small style="color:var(--muted)">Grün: Bearbeitung, rot: Liegezeit. Rechenbeispiel mit der Annahme eines 8-Stunden-Arbeitstags (nicht im Szenario): Bearbeitung etwa 1 %. Der grüne Streifen ist mindestens sichtbar gezeichnet.</small></div>
+</section>
+
+<section class="panel" id="p-opt">
+<div class="ph"><h2>Optimierung je Schritt</h2><span><span class="pill">✓ Fassung v2, von Ahmet übernommen</span> <button class="back" data-go="start">← Übersicht</button></span></div>
+<div class="order"><b>1 Eliminieren</b>→<b>2 Vereinfachen</b>→<b>3 Zusammenfassen</b>→<b>4 Parallelisieren</b>→<b>5 Standardisieren</b>→<b>6 Automatisieren</b></div>
+<div class="filters" id="filters"></div>
+<div class="tw"><table id="optTable"><thead><tr><th>Schritt</th><th>Entscheidung</th><th>Begründung</th></tr></thead><tbody></tbody></table></div>
+<details style="margin-top:12px"><summary>Wo steckt KI, wo stecken feste Regeln?</summary><div class="in"><p>Fast alles läuft über feste Regeln (Pflichtfelder, Betragsgrenze, Erinnerungen, Status). Eine KI ist nur an einer Stelle vorgesehen: Sie schlägt bei der Antragstellung eine Kategorie für die Begründung vor, damit die Teamleitung schneller bearbeiten kann. Die Teamleitung sieht immer auch die Originalbegründung. Datenschutz: nur datenschutzgeprüftes Tool, nur der Begründungstext, Zugriff nur für beteiligte Rollen.</p></div></details>
+</section>
+
+<section class="panel" id="p-soll">
+<div class="ph"><h2>Soll-Prozess</h2><span><span class="pill">✎ Entwurf, Freigabe steht aus</span> <button class="back" data-go="start">← Übersicht</button></span></div>
+<div class="tools"><button class="btn" id="playSoll">▶ Ablauf abspielen</button><span class="prog" id="prSoll"></span><span class="legend"><span><i class="sw grn"></i>automatisiert (feste Regel, eine KI-Stelle)</span><span><i class="sw blu"></i>Mensch entscheidet (Kontrollpunkt)</span><span><i class="sw dsh"></i>Ausblick</span></span></div>
+<div class="hint"><i></i><span><b>Tipp:</b> Alle Kästen und Rauten sind anklickbar. Die Details erscheinen unter dem Diagramm, als Beispiel ist Schritt 1 schon geöffnet. Oder starte oben den Ablauf.</span></div>
+<div class="swim"><svg id="svgSoll" viewBox="0 0 1100 490" role="img" aria-label="Swimlane des Soll-Prozesses"></svg></div>
+<div class="card detail" id="detSoll"><h4>Schritt anklicken</h4><p>Hier erscheinen Erklärung, Einordnung und der Bezug zum Chat.</p></div>
+<details><summary>Vier menschliche Kontrollpunkte (Human in the Loop)</summary><div class="in">
+<p><span class="tg t-man">Pflicht</span><b>Freigabe der Geschäftsführung über 2.000 €.</b> Vorgabe der Geschäftsführung, ein Mensch entscheidet final.</p>
+<p><span class="tg t-man">Mensch</span><b>Prüfung der Teamleitung.</b> Die fachliche Genehmigungsstufe bleibt beim Menschen, jetzt mit Frist und Erinnerung.</p>
+<p><span class="tg t-man">Mensch</span><b>Finanzen bei Auffälligkeiten.</b> Die automatische Budget-Vorprüfung entscheidet nicht allein.</p>
+<p><span class="tg t-man">Mensch</span><b>Geschäftsführung bei fehlendem Budget.</b> Ergänzung von Ahmet: Die Teamleitung fragt direkt bei der Geschäftsführung Budget an, die Geschäftsführung entscheidet.</p></div></details>
+<details><summary>Vorgaben aus dem Szenario, die bleiben</summary><div class="in"><ul class="clean"><li>Über 2.000 € genehmigt ein Mensch final (nicht verhandelbar).</li><li>Datenschutz: Die Anträge enthalten personenbezogene Angaben.</li><li>Nur das vorhandene einfache Formular-/Workflow-Tool, keine teure Speziallösung.</li><li>Mehrstufige Genehmigung, Nachvollziehbarkeit und Gleichbehandlung bleiben im Blick.</li></ul></div></details>
+</section>
+
+<section class="panel" id="p-kpi">
+<div class="ph"><h2>Kennzahlen</h2><span><span class="pill">✓ freigegeben (Fassung v2)</span> <button class="back" data-go="start">← Übersicht</button></span></div>
+<p class="lead">Drei Kennzahlen belegen den Erfolg (die erste hat zwei Messwerte), Tempo und Qualität halten sich die Waage. Klicke eine Kachel an.</p>
+<div class="ktiles" id="ktiles"></div>
+<div class="card detail" id="detK"><h4>Kachel anklicken</h4><p>Ausgangswert, Daten, Euro-Rechnung, Fehlanreiz und Gegenmaßnahme erscheinen hier.</p></div>
+<details><summary>Fairer Vorher-Nachher-Vergleich</summary><div class="in"><ul class="clean">
+<li><b>Ausgangswerte zuerst sichern.</b> Durchlaufzeit, Aufwand und Rückläuferquote gibt das Szenario vor. Die Zufriedenheit wird vor der Einführung per Kurzumfrage erhoben.</li>
+<li><b>Gleiche Messregeln.</b> Start ist „Antrag eingereicht“, Ende ist „Freigabe bei der antragstellenden Person“, es zählen nur Arbeitstage.</li>
+<li><b>Gleiche Bedingungen.</b> Gleicher Antragsmix, Anträge über und unter 2.000 € getrennt auswerten, keine Ausnahmezeiten vergleichen.</li>
+<li><b>Einführungsphase herausnehmen.</b> Die ersten Wochen zählen nicht.</li>
+<li><b>Nicht nur der Durchschnitt.</b> Zusätzlich der Median und die langsamsten Fälle.</li>
+<li><b>Datenschutz.</b> Nur zusammengefasst auswerten, nicht nach einzelnen Personen.</li></ul></div></details>
+<details open><summary>Erfolgsregel</summary><div class="in"><p>Die Optimierung gilt als belegt, wenn Durchlaufzeit und Bearbeitungsaufwand sinken, die Rückläuferquote nicht steigt und die Zufriedenheit nicht sinkt. Ob das erreicht ist, entscheidet der Mensch, nicht die KI.</p></div></details>
+<div class="note">Euro-Beträge lassen sich erst ausrechnen, wenn Stundensatz und Zahl der Anträge bekannt sind. Beides steht nicht im Szenario, deshalb steht hier nur die Rechenformel und kein erfundener Betrag.</div>
+</section>
+
+<section class="panel" id="p-prompts">
+<div class="ph"><h2>Prompts und Entscheidungen</h2><span><button class="back" data-go="start">← Übersicht</button></span></div>
+<p class="lead">So ist das Ergebnis entstanden: Die KI hat vorgeschlagen, Ahmet hat geprüft, ergänzt und entschieden. Öffne einen Eintrag, dann siehst du den Wortlaut (Spracheingabe, unverändert).</p>
+<div class="filters" id="pf"></div>
+<div id="tl"></div>
+<div class="note">„Suchprozess“ und „Fehleranreiz“ in den Diktaten sind Verhörer für Freigabeprozess und Fehlanreiz. Zitate bleiben im Wortlaut.</div>
+</section>
+
+<section class="panel" id="p-offen">
+<div class="ph"><h2>Annahmen und offene Punkte</h2><span><button class="back" data-go="start">← Übersicht</button></span></div>
+<p class="lead">Was nicht im Szenario steht, ist hier markiert und von Ahmet zu klären. Es wird nichts real umgesetzt.</p>
+<details open><summary>Im Ist-Prozess angenommen</summary><div class="in"><ul class="clean"><li>Die Rücksprache geht zurück an die antragstellende Person.</li><li>Das Formular geht von der Geschäftsführung zurück an Finanzen (ergibt sich aus dem Einscannen nach allen Unterschriften).</li><li>Die antragstellende Person bestellt.</li><li>Ob genau 2.000 € zur Geschäftsführung gehören, ist offen („über“ und „unter“ 2.000 €).</li></ul></div></details>
+<details><summary>Im Soll-Prozess angenommen</summary><div class="in"><ul class="clean"><li>Das Workflow-Tool kann Pflichtfelder, Weiterleitung, Erinnerungen, Status und Verlauf.</li><li>Die Budgetdaten sind digital verfügbar.</li><li>Eine Vertretung für die Teamleitung lässt sich einführen.</li><li>Während der Budgetanfrage wartet der Antrag im Status „Budget in Klärung“.</li><li>Die KI-Kategorien sind noch festzulegen.</li></ul></div></details>
+<details><summary>Bei den Kennzahlen offen</summary><div class="in"><ul class="clean"><li>Stundensatz und Zahl der Anträge.</li><li>Zielwerte (das Szenario nennt keine).</li><li>Gewichtung von Tempo und Qualität: Vorschlag von Claude.</li></ul></div></details>
+<details><summary>Ausblick, nicht im Soll-Prozess</summary><div class="in"><ul class="clean"><li>Automatische Bestellung nach der Genehmigung, nur wenn Anbindung und Lieferant vorhanden sind (Ahmet: Variante A mit Ausblick auf B).</li><li>Günstigere Lieferanten zu anderen Konditionen (Idee von Ahmet, Lieferanten stehen nicht im Szenario).</li></ul></div></details>
+</section>
+</main>
+<footer><div class="wrap">Praxisprüfung Modul 11 · Ahmet Özcorapci · KI-Werkzeug Claude · Gezeichnete Grafiken ohne Fotos und reale Personen · Das Szenario ist fiktiv, es wird nichts real umgesetzt.</div></footer>
+
+<script>
+var PROMPTS=[{"id": "P1", "nr": "Prompt 1", "titel": "Ist-Prozess als Swimlane", "wort": "„Okay, dann fangen wir mit der ersten Aufgabe an. Und in der ersten Aufgabe geht es, dass wir diesen Ist-Prozess modellieren sollen. Und auch die Schwachstellen analysieren. Das heißt, du hast ja das Szenario als Word-Dokument bekommen und ich will, dass du in diesem Szenario mir ein Diagramm machst, idealerweise als so eine Art Swimlane, und in diesem Diagramm soll das Ist-Szenario beschrieben werden mit einer Darstellung, mit der Schritten, mit den Zuständigkeiten, mit den Entscheidungspunkten, wer gibt wann, wo, wie, was. Und mach erstmal das eine und danach gehen wir dann zu dem nächsten Unterpunkt aus dieser Aufgabe, beziehungsweise zu der nächsten Teilaufgabe aus Aufgabe“", "kurz": "Aus dem Szenario ein Swimlane-Diagramm des Ist-Prozesses zeichnen, mit Schritten, Zuständigkeiten und Entscheidungspunkten.", "ergebnis": "Fassung v1: Swimlane mit vier Bahnen, sechs Schritten und drei Entscheidungspunkten. Fünf Punkte als Annahme oder offen markiert.", "status": "v1"}, {"id": "P2", "nr": "Prompt 2", "titel": "Größte Schwachstellen", "wort": "„Okay, nachdem du das Ist-Szenario jetzt halt dokumentiert hast, analysiere bitte, die größten Schwachstellen aus dem aktuellen Ist-Szenario und nutze natürlich halt die gesamten Informationen, die du auch hast, ja, aus diesem Dokument, wo das Ist-Szenario auch bestimmt beschrieben worden ist.“", "kurz": "Die größten Schwachstellen aus dem Ist-Prozess herausarbeiten, mit allen Informationen aus dem Szenario.", "ergebnis": "Fassung v1: fünf Schwachstellen mit Beleg im Szenario.", "status": "v1"}, {"id": "P3", "nr": "Prompt 3", "titel": "Größte Zeitursache, Personal oder Prozess?", "wort": "„Okay. Wo liegt deiner Meinung nach die größte Schwachstelle, ja, die die meiste Zeit verursacht? Und ist diese Schwachstelle eher ein Personalproblem oder ein Prozessproblem?“", "kurz": "Welche Schwachstelle verursacht die meiste Zeit, und ist sie eher ein Personal- oder ein Prozessproblem?", "ergebnis": "Einschätzung von Claude: Liegezeit im Fach der Teamleitung, eher ein Prozessproblem. Zeitanteile je Schritt stehen nicht im Szenario.", "status": "Einschätzung"}, {"id": "R1", "nr": "Review von Ahmet", "titel": "Auswahl der Schwachstellen", "wort": "„Ich stimme mit deinen Einschätzungen überein, dass das einmal natürlich halt die Zeit ist, dass der Antrag im Postfach liegt und auch das Thema mit der Hauspost. Und ja, die ganze gesamte Prüfverfahren, dass wir halt alles von der Teamleitung abhängig machen, ist also ein Personalproblem. Und der Prozessproblem ist, wie gesagt, ja, liegt in einem Postfach. Dann haben wir nochmal das Prozessproblem, ist die Blackbox. Ne? Wir wissen halt nicht, wo etwas in welchem Zustand der aktuelle Prozess dann auch ist. Und das sind die Schwachstellen, die ich so eingeordnet habe.“", "kurz": "Ahmet stimmt zu: Liegezeit im Fach und Hauspost sind die größten Zeitursachen. Die Abhängigkeit von der Teamleitung ordnet er als Personalproblem ein, das Liegen im Fach und die Blackbox als Prozessprobleme.", "ergebnis": "Fassung v2: vier Schwachstellen. Ahmet gibt frei („ja“). Abweichung von Claude: Personal- statt Prozessproblem, Ahmets Einordnung gilt.", "status": "freigegeben"}, {"id": "P4", "nr": "Prompt 4", "titel": "Optimierung je Schritt", "wort": "„Gehen wir jetzt weiter mit der Aufgabe 2. Hier geht es darum, dass wir den Suchprozess optimieren sollen. Dafür brauchen wir den Entwurf. Wir müssen uns gemeinsam entwerfen. So, ich möchte jetzt, dass du mir dass wir jetzt gemeinsam den Ablauf verbessern. Und wir brauchen dafür eine eine dosierte Automatisierung. Und als erstes möchte ich von dir, dass du mir mal auflistest, wo wir was optimieren könnten. Also die Schritte. Und danach will ich für jeden Schritt wissen, warum wir das optimieren können. Also ob wir dann zum Beispiel ob dieser Schritt entfallen kann. Ob er vereinfacht werden kann, ob er automatisiert werden kann, zum Beispiel über die KI oder feste Regeln, oder ob es noch bewusst manuell bleibt, und auch mit der Begründung. So, dann dürfen wir natürlich auch nicht vergessen, dass wir auch Vorgaben haben, die wir noch die bleiben müssen. Und wir brauchen auch hierbei noch mindestens einen menschlichen Kontrollpunkt, also Human in the Loop. Okay, also fangen“", "kurz": "Gemeinsam den Ablauf mit dosierter Automatisierung verbessern: je Schritt entfällt, vereinfacht, automatisiert (KI oder feste Regel) oder bewusst manuell, mit Vorgaben und mindestens einem menschlichen Kontrollpunkt.", "ergebnis": "Fassung v1: Vorschlag je Schritt mit Begründung, drei Kontrollpunkte, fast alles mit festen Regeln.", "status": "v1"}, {"id": "R2", "nr": "Review von Ahmet", "titel": "Budget fehlt, KI-Kategorien", "wort": "„Also ich fasse mal ganz kurz zusammen. Die Optimierungsschritte, die machen soweit für mich Sinn. Einen Schritt müssen wir noch einbauen, und zwar, wenn überhaupt kein Budget vorhanden ist, dann kann ja auch schon die Teamleitung ja schon direkt an die Geschäftsführung gehen und nach Budget fragen. Das muss sowieso passieren. Respektive, ja genau, es kann frühestens ab der ab dem Zeitpunkt passieren. Was für mich Sinn macht, ist, ja, du sagst, das ist halt alles, kann mit festen Regeln machen. Und den Einbau der KI, ja, wenn es unklar ist, was für eine Begründung das auch ist, dass die KI dann bei der Begründung bei der Antragstellung das so in Kategorien einbauen kann. Damit wir es halt schneller durch die Teamleitung bearbeitet werden kann und ja auch in dem Thema Datenschutz. Das können wir genauso auch machen. Das würde soweit passen. So, das heißt, ich habe mich jetzt nicht gegen deine Automatisierungsschritte entschieden. Das war gut so. Ja, das ist auch Teil der Aufgabe gewesen, beziehungsweise Teil der Reflexion. Und mir war auch nicht zu viel Automatisierung, also die manuellen Schritte, ja, die machen für mich Sinn. Eventuell kann man zum Beispiel den Bestellprozess selbst vielleicht selbst auslösen, sobald es ja genehmigt worden ist. Kann man ja den Prozess selbst auslösen. Da weiß ich aber jetzt nicht, ne, ob da die Anbindung halt dann direkt dann auch funktioniert, ja, ob man dann auch weiß, ob man den Lieferanten auch hat, ja, der dann die Bestellung dann auch empfängt. Das ist aber ein“", "kurz": "Die Vorschläge passen. Ergänzungen: Bei fehlendem Budget fragt die Teamleitung direkt bei der Geschäftsführung an. Eine KI ordnet unklare Begründungen in Kategorien ein. Die Bestellung könnte automatisch ausgelöst werden, offen ist die Anbindung.", "ergebnis": "Fassung v2: neuer Zweig „Budget fehlt“, KI nur bei der Begründungskategorie, vierter Kontrollpunkt.", "status": "v2"}, {"id": "P6", "nr": "Prompt 6", "titel": "Entscheidung zur Bestellung", "wort": "„Ja, wir belassen es bei der A mit Ausblick auf B. Ja, das kann ja dann teilweise direkt auch ausgelöst werden, weil es kann natürlich auch sein, dass wir Lieferanten haben, die eventuell das die gewünschte Bestellung noch günstiger einkaufen, von denen wir das Kunden noch günstiger einkaufen können, weil wir andere Konditionen haben.“", "kurz": "Die Bestellung bleibt bei der antragstellenden Person (Variante A), die automatische Auslösung ist ein Ausblick (Variante B).", "ergebnis": "Entscheidung von Ahmet: A mit Ausblick auf B.", "status": "entschieden"}, {"id": "P7", "nr": "Prompt 7", "titel": "Kennzahlen und Vorher-Nachher", "wort": "„Das Thema Zusammenstellung des Soll-Prozesses bzw. der Optimierungsentscheidung, wie wir es grafisch dargestellt haben, machen wir nachher. Ich möchte jetzt erstmal mit dir die dritte Teilaufgabe machen und da hier geht es darum, dass wir den Erfolg messbar machen. Also ich will mit dir gemeinsam drei Kennzahlen definieren, wie wir den Erfolg des neuen Soll-Prozesses belegen würden. Und wie man mit einem fairen Vorher-Nachher-Vergleich das anstellen würden. Und wir müssen natürlich auch jede Kennzahl mit einem möglichen Fehleranreiz noch benennen. Und da will ich, dass du mir das Ganze erstmal“", "kurz": "Drei Kennzahlen vorschlagen, mit denen der Erfolg des Soll-Prozesses belegt wird, dazu ein fairer Vorher-Nachher-Vergleich und je Kennzahl ein Fehlanreiz.", "ergebnis": "Fassung v1: Durchlaufzeit, Rückläuferquote, Zufriedenheit, mit Ausgangswerten aus dem Szenario.", "status": "v1"}, {"id": "R3", "nr": "Review von Ahmet", "titel": "Kostensicht", "wort": "„Wir können das grundsätzlich als Grundlage nehmen, hier diesen Entwurf. Das würde soweit passen. Wir sollten mal überlegen, halt, welche Kennzahlen wir auf die Kosten, ja, auch nochmal vielleicht runterbrechen können. Auf die Kosten des Gesamtergebnisses. Natürlich halt für mich ist zum Beispiel die Kosten ist hier Rückläuferquote, weil daran ja wirklich auch dann gearbeitet an dem Thema. Zufriedenheit so mit Kosten auf das Gesamtergebnis kann man halt ein bisschen schlechter messen, so in Eurobeträgen, weil da hat ja ich glaube, wobei das kann man auch ein bisschen messen. Dann natürlich auch die Durchlaufzeit, ne? Weil natürlich halt wir natürlich auch die Durchlaufzeit auch in Kosten noch messen können, und zwar natürlich halt in Mitarbeiterkosten, also ergo in richtigen Eurobeträgen. Weil wenn man halt natürlich mal die Zeit betrachtet, ne, bei den ganzen Medienbrüchen mit Einscannen und Co., das kostet ja auch Zeit, ergo sind das natürlich auch Personalkosten, die da entstehen, und das kann man halt messen.“", "kurz": "Der Entwurf ist eine gute Grundlage. Ahmet möchte die Kennzahlen zusätzlich in Kosten (Euro) herunterbrechen: Rückläufer als Kostentreiber, Durchlaufzeit über Mitarbeiterkosten, Zufriedenheit schwerer messbar.", "ergebnis": "Fassung v2: Bearbeitungsaufwand als eigener Messwert (1b), Euro-Rechenformeln, neue Fehlanreize. Ahmet gibt frei: „Fassung V2. Das passt so.“", "status": "freigegeben"}, {"id": "P9", "nr": "Prompt 9", "titel": "Webseite als Abgabeform", "wort": "„Also wenn ich ganz ehrlich bin, würde ich die gesamte Aufgabe eigentlich ja am liebsten halt über eine Webseite darstellen. Und zwar vielleicht eine Webseite, die bei mir im GitHub Repo liegt, und ich gebe dann meinem Dozenten die URL. Und dort soll wirklich schön grafisch aufbereitet werden. Okay, das ist der Ist-Zustand, das ist der Soll-Zustand, das sind die Optimierungsvorschläge, dass das Ganze halt so ein bisschen grafisch dann auch so sieht. Mit vielleicht den Farben Rot, Gelb, Grün, also was weiß ich, wo ich Schwachstelle und Co. mit Animationen, und wo er dann auch zum Beispiel auch sieht, ne, wenn man halt vielleicht auf gewisse Elemente auf der Webseite auch klickt, was wurde vielleicht im Chat zusammengefasst. Wenn er zum Beispiel auf einen Soll-Prozess dann auch sieht, dass ihm vielleicht im Soll-Prozess noch etwas Genaueres auch entsteht, wo man sich die Swimlane auch sieht. Also mal so eine Idee, vielleicht kannst du mir daraus mal erstmal vielleicht ein Mockup entwerfen. Und wenn das Mockup so passt, ja, dann könnten wir ja vielleicht nochmal hingehen und dann die Webseite einfach in GitHub in der Repo mal ablegen.“", "kurz": "Die Abgabe grafisch als Webseite aufbereiten, mit Farben, Animationen und Klick-Details aus dem Chat. Zuerst ein Mockup.", "ergebnis": "Mockup im Chat, von Ahmet als Richtung angenommen.", "status": "Mockup"}, {"id": "P10", "nr": "Prompt 10", "titel": "Lokale HTML-Seite", "wort": "„Ja, also wichtig ist halt, ne, wenn wir das jetzt auf der Webseite machen, in GitHub, ne, also wenn du mir in GitHub jetzt halt eine URL reinlegst und ich das an den Dozenten gebe, dass dort wirklich dann halt Animationen drin sind, Sachen irgendwie optisch dargestellt werden, Farben mit eingebaut werden. Bauen wir das Ganze mal, ja, und dann kann ich mir das gerne anschauen. Von mir aus kannst du erstmal eine reine HTML-Seite machen, die ich dann halt lokal ablege und mir da mal ein bisschen durchklicke. Und das Thema mit GitHub und Co. kann man halt später machen, das ist nicht so wichtig.“", "kurz": "Die Seite bauen, zuerst als reine HTML-Datei, die Ahmet lokal durchklickt. GitHub und Hosting später.", "ergebnis": "Fassung v1 der Seite (ein langer Scroll-Entwurf).", "status": "v1"}, {"id": "P11", "nr": "Prompt 11", "titel": "Überarbeitung der Seite", "wort": "„Okay, also inhaltlich gefällt mir die Seite gut. Was mir nicht so gut gefällt, ist, dass halt sehr viel zum Scrollen noch ist. Es muss auch so Jump Points auch geben, ne, wo ich dann halt von einem Punkt zum anderen Punkt springen kann. Also wenn ich zum Beispiel auf den Soll-Prozess klicke, dann sehe ich halt den Soll-Prozess und wenn ich auf den Ist-Prozess klicke, dann springe ich halt dann direkt dann da rein. Die Farben wirken für mich noch nicht so ja, das sind halt so Standard-KI-Farben. Schau doch mal, ob du irgendwelche Sachen auch hast, die so ein bisschen mehr so auf Management-Ebene so sind, mehr so Farben auch so drin sind. Das Rot, Grün und Gelb, ne, in dem Status muss ein bisschen klarer sein. Die Animation müsste vielleicht ein bisschen auch prägnanter auch dargestellt werden. Aber sonst so im Groben ist das Ganze soweit okay. Bauen wir eine neue Version, ja. Entscheidend ist, wie gesagt, nicht so viel zum Scrollen, vielleicht so Bereiche, die man halt aufklappen kann, zuklappen kann und dann auch natürlich auch so Jump Points innerhalb der Webseite, dass man auch wieder auf die erste Seite kann. Und ich hätte gerne noch das Logo von der Firma LearnWise. Noch mit dabei, dass wir vielleicht nochmal oben noch, das Logo machen wir nicht. Das vergisst du bitte einfach mal.“", "kurz": "Weniger Scrollen, aufklappbare Bereiche, Sprungmarken und Weg zurück zur Übersicht, Management-Farben, klarere Ampel, prägnantere Animation. Kein Logo.", "ergebnis": "Fassung v2 der Seite (Reiter, Management-Farben, Ampel, Animation).", "status": "v2"}, {"id": "P12", "nr": "Prompt 12", "titel": "Firmenname, Summary, Hell und Dunkel, Klick-Hinweis", "wort": "„Ja, gefällt mir sehr gut. Ne? Du hast in der vorigen Version hast du noch die Firma noch da drin gehabt. Also die Firma Landwerk Institut GmbH. Dass wir das noch ein bisschen mit reinnehmen, ne? Und dass da wir da vielleicht so eine Management-Summary als Titel nochmal so reinnehmen. Für diese gemeinnützige Einrichtung. Und dann brauche ich diese Webseite einmal im im hellen Modus und einmal im Dark Modus, also im dunklen Modus. Und wenn du das dann hast, ja, dann hätte ich dann gerne die HTML-Datei zum Download, ne, was ich noch an jemanden schicken kann. Oder du legst es mir in GitHub ab in meinem Repo und ich nutze dann quasi die URL und gebe sie dann einfach meinem Dozenten und sage, hier ist meine Aufgabe. Und das war es dann auch soweit. Eine Sache, die noch ein bisschen mir fehlt, ist, mir fehlt noch so ein bisschen so der Hinweis, wenn ich mir das zum ersten Mal anschaue, dass ich ja auch auf die Boxen ja auch klicken kann. Und wenn ich auf diese Boxen dann auch klicken kann, also bei der Ist-Übersicht, dass wir dann da auch noch mehr Informationen bekommen. Also wenn ich mir zum Beispiel den Schritt anklicke, Formular ausfüllen in Word, dass dann halt da unten drunter und das muss noch irgendwo noch vermerkt werden.“", "kurz": "Firmenname und eine Management Summary als Titel, Seite in hellem und dunklem Modus, Hinweis auf die anklickbaren Kästen, am Ende Datei oder GitHub-URL für den Dozenten.", "ergebnis": "Fassung v3 der Seite (Firmenname, Management Summary, Hell und Dunkel, Klick-Hinweis).", "status": "v3"}, {"id": "P13", "nr": "Prompt 13", "titel": "Kopfbereich und Icon-Umschalter", "wort": "„Ja, das ist schon okay. Das ist aber nicht so ganz das Thema. Also ich habe gesagt, ich will hell und dunkel auch haben. Und Automodus, der soll jetzt nicht über Text dargestellt werden, diese verschiedenen Optionen, sondern bitte über Icons. Dann gefällt mir oben der gesamte Header-Bereich nicht so. Das ist alles so ein bisschen klein und krickelig. Das sieht nicht so schön aus. Auch die verschiedenen Menüpunkte Übersicht ist Prozessschwachstelle, Optimierung. Das sieht einfach nicht management-like aus. Und da müsstest du nochmal nachbessern, ansonsten halt zu den Inhalten, die so drinstehen, das ist soweit okay. Das können wir erstmal so drin lassen. Aber das, wie gesagt, das muss halt vom Look and Feel gerade halt oben in der Kopfzeile, was so alles ist, ja, auch angepasst werden. Und bei der Kopfzeile ist mir aufgefallen, wenn ich von hell auf dunkel wenn ich im Dunkeln bin, dann sehe ich oben die Kopfzeile nicht. Die hat dieselbe Farbe, Hintergrundfarbe wie der dunkle Hintergrund. Also es muss sich schon farblich ein bisschen unterscheiden.“", "kurz": "Hell, Dunkel und Auto als Icons, ein größerer, managementtauglicher Kopfbereich mit besseren Menüpunkten, im Dunkelmodus eine sichtbar abgesetzte Kopfzeile.", "ergebnis": "Fassung v4 der Seite (Kopfbereich, Icon-Umschalter, abgesetzter Dunkelmodus).", "status": "v4"}, {"id": "P15", "nr": "Prompt 15", "titel": "Animation: nur der aktuelle Schritt", "wort": "„Ich würde weitermachst, eine Sache noch. Bei der Animation sieht man sehr schlecht ja, in welchem Schritt du genau bist. Also in den Grafiken. Ja. Das ist sowohl im Soll-Prozess als auch im Ist-Prozess. Weil du hast halt immer so einen so eine Box, die sich so vergrößert. Und ich dachte immer, ich gucke halt immer auf diese Box, weil ich immer denke, das ist der Schritt, wo ich gerade stecke. Aber das sieht man nicht. Also die Box, die sich vergrößert, ist gut. Ja. Aber die sollte vielleicht nur dort sein, wo in der Animation, wo im Ablauf ja wir aktuell stehen. Vielleicht machen wir das mal so rum.“", "kurz": "Beim Abspielen soll nur der aktuelle Schritt vergrößert sein, damit man erkennt, wo man im Ablauf steht.", "ergebnis": "Fassung v5 der Seite (diese Seite, Entwurf): aktueller Schritt vergrößert, die übrigen abgedunkelt, Anzeige „Schritt x von y“.", "status": "Entwurf"}];
+var LANES=["Antragstellende Person","Teamleitung","Abteilung Finanzen","Geschäftsführung"];
+var NS="http://www.w3.org/2000/svg";
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var IC={
+start:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ist:'<circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="12" r="2.5"/><path d="M7.5 12h9"/><path d="M14 9l3 3-3 3"/>',
+schwach:'<path d="M12 3L22 20H2z"/><path d="M12 10v4"/><path d="M12 17.2v.1"/>',
+opt:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+soll:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/>',
+kpi:'<rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="17" rx="1"/>',
+prompts:'<path d="M4 5h16v11H9l-5 4z"/>',
+offen:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.1"/>'};
+function ico(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[k]+'</svg>'}
+var PAN=[["start","Übersicht"],["ist","Ist-Prozess"],["schwach","Schwachstellen"],["opt","Optimierung"],["soll","Soll-Prozess"],["kpi","Kennzahlen"],["prompts","Prompts"],["offen","Annahmen"]];
+var tabs=document.getElementById("tabsin");
+PAN.forEach(function(p){var b=document.createElement("button");b.innerHTML=ico(p[0])+"<span>"+p[1]+"</span>";b.setAttribute("data-go",p[0]);b.id="tab-"+p[0];tabs.appendChild(b)});
+var timers=[];
+function stopPlay(){timers.forEach(clearTimeout);timers=[];document.querySelectorAll(".node.act").forEach(function(n){n.classList.remove("act")});document.querySelectorAll("svg.playing").forEach(function(s){s.classList.remove("playing")});["prIst","prSoll"].forEach(function(i){var p=document.getElementById(i);if(p)p.textContent=""});["playIst","playSoll"].forEach(function(i){var b=document.getElementById(i);if(b)b.textContent="▶ Ablauf abspielen"});}
+function go(id){if(!document.getElementById("p-"+id))id="start";stopPlay();PAN.forEach(function(p){document.getElementById("p-"+p[0]).classList.toggle("on",p[0]===id);var t=document.getElementById("tab-"+p[0]);t.classList.toggle("on",p[0]===id)});if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);window.scrollTo(0,0);if(id==="schwach"){var b=document.getElementById("bar");b.classList.remove("in");setTimeout(function(){b.classList.add("in")},80)}if(id==="start")runCount();hintFor(id)}
+document.addEventListener("click",function(e){var t=e.target.closest("[data-go]");if(t){go(t.getAttribute("data-go"))}});
+window.addEventListener("hashchange",function(){go(location.hash.replace("#",""))});
+var DET={
+i1:["1 Formular ausfüllen und ausdrucken","Die antragstellende Person füllt ein Word-Formular aus und druckt es aus.","Medienbruch: Der Ausdruck startet die Papierkette. Jeder vierte Antrag kommt wegen fehlender oder unklarer Angaben zurück (z. B. Begründung, Kostenstelle).","Prompt 1 und 2: Ist-Prozess als Swimlane, Schwachstellen herausgearbeitet."],
+i2:["2 Teamleitung prüft und unterschreibt","Das ausgedruckte Formular wird der Teamleitung ins Fach gelegt. Sie prüft es, wenn sie im Haus ist, und unterschreibt oder legt Rücksprache-Bedarf zurück.","Kritisch: Liegezeit. Teamleitungen sind oft in Terminen, das Formular bleibt im Fach liegen. Von neun Arbeitstagen sind nur etwa 45 Minuten Bearbeitung.","Ahmet: Das Liegen im Fach ist ein Prozessproblem, die Abhängigkeit von der Teamleitung ein Personalproblem."],
+id2:["Rücksprache nötig?","Die Teamleitung unterschreibt oder legt Rücksprache-Bedarf zurück.","Das Szenario sagt, dass rund jeder vierte Antrag zurückkommt, aber nicht wohin genau. Angenommen: zurück an die antragstellende Person.","Annahme von Claude im Faktencheck markiert."],
+i3:["3 Budget prüfen (Finanzen)","Das unterschriebene Formular geht per Hauspost an Finanzen. Dort wird geprüft, ob Budget vorhanden ist.","Die Hauspost kostet Zeit. Die Budgetprüfung selbst muss bleiben.","Prompt 4 und 5: Hauspost entfällt, Vorprüfung per feste Regel."],
+id3:["Budget vorhanden?","Finanzen prüft, ob Budget vorhanden ist.","Was bei fehlendem Budget passiert, steht im Szenario nicht. Der Entscheidungspunkt ist von Claude abgeleitet.","Ahmet hat später ergänzt, wie das im Soll-Prozess läuft (Teamleitung fragt die Geschäftsführung)."],
+id4:["Betrag über 2.000 €?","Über 2.000 € muss zusätzlich die Geschäftsführung unterschreiben.","Unter 2.000 € ist die Geschäftsführung nicht beteiligt, trotzdem laufen viele Kleinbeträge denselben langen Weg. Genau 2.000 € ist im Szenario offen.","Offene Entscheidung: kürzerer Weg für Kleinbeträge, das Szenario nennt dafür keine Grenze."],
+i4:["4 Geschäftsführung unterschreibt","Das Formular wandert erneut per Hauspost weiter und wird von der Geschäftsführung unterschrieben.","Medienbruch Hauspost. Die menschliche Freigabe selbst ist Vorgabe und bleibt.","Vorgabe der Geschäftsführung: Über 2.000 € entscheidet ein Mensch final."],
+i5:["5 Einscannen und E-Mail","Nach allen Unterschriften scannt Finanzen das Formular ein und schickt der antragstellenden Person eine E-Mail mit der Freigabe.","Medienbruch Scan. Der Scan existiert nur wegen des Papiers.","Prompt 4: Scan entfällt, automatische Mitteilung."],
+i6:["6 Bestellen","Erst nach der Freigabe darf bestellt werden.","Keine Schwachstelle. Wer bestellt, steht im Szenario nicht, angenommen ist die antragstellende Person.","Entscheidung: Variante A mit Ausblick auf B."],
+ib:["Gesamter Prozess: Blackbox","Niemand kann während des Verfahrens sehen, wo ein Antrag gerade liegt.","Prozessproblem laut Ahmet.","Im Soll-Prozess beendet durch die Statusanzeige."],
+s1:["1 Digitaler Antrag","Das Formular liegt im vorhandenen Workflow-Tool, mit Pflichtfeldern (Begründung, Kostenstelle als Auswahl). Eine KI schlägt für die Begründung eine Kategorie vor.","Der Ausdruck entfällt. Pflichtfelder verhindern die häufigsten Gründe für Rückläufer. Die Kategorie hilft der Teamleitung beim schnelleren Bearbeiten.","Ahmet: Die KI ordnet unklare Begründungen in Kategorien ein. Alles andere läuft über feste Regeln."],
+s2:["2 Teamleitung prüft","Digitale Benachrichtigung statt Fach, feste Prüffrist, automatische Erinnerung, Vertretung festlegen. Sie sieht Kategorie und Originalbegründung.","Menschlicher Kontrollpunkt. Das beseitigt die Liegezeit im Fach, die größte Schwachstelle.","Ahmet: Die manuellen Schritte machen für ihn Sinn."],
+sd2:["Rückfrage nötig?","Rückfragen laufen digital im Antrag und sind im Verlauf sichtbar.","Keine Papierwege mehr, die Rückfrage bleibt nachvollziehbar.","Fassung v1 der Optimierungsvorschläge."],
+s3:["Budget-Vorprüfung (feste Regel)","Die Vorprüfung (Kostenstelle gültig, Budget ausreichend) startet gleich beim Einreichen, parallel zur Teamleitung. Finanzen prüft nur bei Auffälligkeiten selbst.","Die Hauspost entfällt. Voraussetzung (Annahme): Die Budgetdaten sind digital verfügbar.","Ahmet hat den Automatisierungen zugestimmt."],
+sd3:["Budget vorhanden?","Ergebnis der automatischen Vorprüfung.","Ja: weiter zur Betragsprüfung. Nein: Budgetanfrage.","Ergänzung von Ahmet zu fehlendem Budget."],
+sb:["Budgetanfrage an die Geschäftsführung","Ist kein Budget vorhanden, wird die Teamleitung informiert und fragt direkt bei der Geschäftsführung Budget an. Die Geschäftsführung entscheidet.","Neuer menschlicher Kontrollpunkt. Der Antrag wartet währenddessen im Status „Budget in Klärung“ (Annahme von Claude).","Ahmet: Das muss ohnehin passieren, frühestens ab dem Zeitpunkt, an dem das fehlende Budget feststeht."],
+sd4:["Betrag über 2.000 €?","Eine feste Regel prüft den Betrag: Über 2.000 € geht der Antrag zur Geschäftsführung, sonst direkt zur Mitteilung.","Eindeutige Regel, keine KI nötig. Anträge über und unter 2.000 € werden bei den Kennzahlen getrennt ausgewertet.","Ob Kleinbeträge einen kürzeren Weg bekommen, ist offen (keine Grenze im Szenario)."],
+s4:["4 Freigabe der Geschäftsführung","Digitale Vorlage mit Betrag, Kostenstelle, Budgetstatus, Frist und Erinnerung. Die Geschäftsführung genehmigt final.","Pflicht-Kontrollpunkt über 2.000 €, Hauspost und Scan entfallen.","Vorgabe der Geschäftsführung: Ein Mensch genehmigt final."],
+s5:["5 Mitteilung und Ablage","Bei Freigabe wird die antragstellende Person automatisch benachrichtigt, der Antrag bleibt im Tool abgelegt.","Scan und manuelle E-Mail entfallen.","Automatisierung von Ahmet bestätigt."],
+s6:["6 Bestellen","Die antragstellende Person bestellt, sobald die Freigabe da ist. Ausblick: automatische Auslösung, wenn Anbindung und Lieferant vorhanden sind.","Gestrichelt: Ausblick, nicht Teil des Soll-Prozesses.","Ahmet: Variante A mit Ausblick auf B."],
+sbx:["Statusanzeige für alle","Die antragstellende Person sieht jederzeit, wo ihr Antrag liegt.","Beendet die Blackbox, die vierte Schwachstelle.","Teil von Fassung v2 der Optimierungsvorschläge."]
+};
+function lanes(svg){var defs=el("defs",{},svg);[["n","var(--ink)"],["o","var(--orange)"],["g","var(--grn)"],["b","var(--blu)"],["x","var(--muted)"]].forEach(function(m){var mk=el("marker",{id:"a"+svg.id+m[0],viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto"},defs);el("path",{d:"M0,0L10,5L0,10z",style:"fill:"+m[1]},mk)});
+for(var i=0;i<4;i++){var y=20+i*105;el("rect",{x:20,y:y,width:1060,height:105,class:"lane-bg"+(i%2?" alt":"")},svg);el("text",{x:30,y:y+20,class:"lane-lbl"},svg).textContent=LANES[i]}}
+function cy(l){return 72+105*l}
+var DELAY=0;
+function node(svg,id,lane,cx,lines,cls,dia){var g=el("g",{class:"node "+(cls||"")+(dia?" dia":""),"data-id":id,tabindex:"0",role:"button","aria-label":lines.join(" "),style:"animation-delay:"+(DELAY+=60)+"ms"},svg);var y=cy(lane);
+if(dia)el("polygon",{points:(cx-56)+","+y+" "+cx+","+(y-38)+" "+(cx+56)+","+y+" "+cx+","+(y+38),class:"main"},g);else{el("rect",{x:cx-62,y:y-29,width:124,height:58,rx:8,class:"main"},g);el("rect",{x:cx-62,y:y-29,width:9,height:58,rx:4,class:"bar"},g)}
+lines.forEach(function(s,i){el("text",{x:cx+(dia?0:4),y:y+4+(i-(lines.length-1)/2)*14},g).textContent=s});
+return g}
+function edge(svg,d,c,anim,lab){el("path",{d:d,class:"edge "+c+(anim?" anim":""),"marker-end":"url(#a"+svg.id+c+")"},svg);if(lab){el("text",{x:lab[0],y:lab[1],class:"elab"+(c==="o"?" o":""),"text-anchor":lab[3]||"start"},svg).textContent=lab[2]}}
+function showDet(svg,det,id){var d=DET[id];if(!d)return;svg.querySelectorAll(".node").forEach(function(n){n.classList.remove("sel")});var g=svg.querySelector('.node[data-id="'+id+'"]');if(g)g.classList.add("sel");det.innerHTML="<h4>"+esc(d[0])+"</h4><p>"+esc(d[1])+"</p><p><b>Einordnung:</b> "+esc(d[2])+"</p><p><b>Aus dem Chat:</b> "+esc(d[3])+"</p>"}
+function wire(svg,det){svg.querySelectorAll(".node").forEach(function(g){var id=g.getAttribute("data-id");g.addEventListener("click",function(){stopPlay();showDet(svg,det,id)});g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();stopPlay();showDet(svg,det,id)}})})}
+function play(svgId,detId,btnId,order,outro){var svg=document.getElementById(svgId),det=document.getElementById(detId),b=document.getElementById(btnId),pr=document.getElementById(svgId==="svgIst"?"prIst":"prSoll");if(timers.length){stopPlay();return}b.textContent="■ Stopp";svg.classList.add("playing");order.forEach(function(id,i){timers.push(setTimeout(function(){svg.querySelectorAll(".node.act").forEach(function(n){n.classList.remove("act")});var g=svg.querySelector('.node[data-id="'+id+'"]');if(g)g.classList.add("act");pr.textContent="Schritt "+(i+1)+" von "+order.length;showDet(svg,det,id)},i*1700))});timers.push(setTimeout(function(){svg.querySelectorAll(".node.act").forEach(function(n){n.classList.remove("act")});svg.classList.remove("playing");pr.textContent="";det.innerHTML=outro;timers=[];b.textContent="▶ Ablauf abspielen"},order.length*1700))}
+function drawIst(){var s=document.getElementById("svgIst");lanes(s);DELAY=0;
+edge(s,"M282,72 H345 V148","o",1,[290,64,"Ausdruck, ins Fach"]);
+edge(s,"M407,177 H424","n");
+edge(s,"M536,177 H610 V253","o",1,[545,170,"nein"]);el("text",{x:616,y:222,class:"elab o"},s).textContent="Hauspost";
+edge(s,"M480,139 V122 H245 V101","x",0,[255,116,"ja: zurück"]);
+edge(s,"M672,282 H694","n");
+edge(s,"M806,282 H829","n",0,[808,275,"ja"]);
+edge(s,"M750,320 V338","x",0,[815,352,"nein: Folge im Szenario nicht beschrieben","end"]);
+edge(s,"M885,320 V358","o",1,[892,342,"ja, Hauspost"]);
+edge(s,"M885,244 V232 H1000 V253","n",0,[892,225,"nein (Kleinbetrag)"]);
+edge(s,"M947,387 H1000 V311","o",1,[955,380,"Hauspost"]);
+edge(s,"M1050,253 V101","n",0,[1044,170,"E-Mail mit Freigabe","end"]);
+node(s,"i1",0,220,["Formular in Word","ausfüllen, ausdrucken"],"yel");
+node(s,"i2",1,345,["Teamleitung prüft","und unterschreibt"],"red pulse");
+node(s,"id2",1,480,["Rücksprache","nötig?"],"",1);
+node(s,"i3",2,610,["Budget prüfen","(Finanzen)"],"yel");
+node(s,"id3",2,750,["Budget","vorhanden?"],"",1);
+node(s,"id4",2,885,["Betrag über","2.000 €?"],"",1);
+node(s,"i4",3,885,["Geschäftsführung","unterschreibt"],"yel");
+node(s,"i5",2,1025,["Einscannen,","E-Mail mit Freigabe"],"yel");
+node(s,"i6",0,1025,["Bestellen"],"");
+var bb=el("g",{class:"node red",tabindex:"0","data-id":"ib",role:"button","aria-label":"Blackbox"},s);el("rect",{x:138,y:450,width:800,height:30,rx:8,class:"main"},bb);el("rect",{x:138,y:450,width:9,height:30,rx:4,class:"bar"},bb);el("text",{x:538,y:470},bb).textContent="Gesamter Prozess: Blackbox, niemand sieht, wo ein Antrag steckt";
+var q=el("g",{},s);el("circle",{cx:410,cy:150,r:12,fill:"var(--red)",class:"blink"},q);el("text",{x:410,y:155,"text-anchor":"middle",style:"fill:#fff;font-size:14px;font-weight:700"},q).textContent="!"}
+function drawSoll(){var s=document.getElementById("svgSoll");lanes(s);DELAY=0;
+edge(s,"M282,72 H345 V148","g",1,[290,64,"digital"]);
+edge(s,"M180,101 V282 H548","g",1,[186,272,"Vorprüfung startet schon beim Einreichen"]);
+edge(s,"M407,177 H424","b");
+edge(s,"M536,177 H610 V253","g",1,[545,170,"nein"]);
+edge(s,"M480,139 V122 H245 V101","x",0,[255,116,"ja: zurück"]);
+edge(s,"M672,282 H694","g");
+edge(s,"M806,282 H829","g",0,[808,275,"ja"]);
+edge(s,"M750,320 V358","b",1,[757,342,"nein"]);
+edge(s,"M885,320 V358","b",1,[892,342,"ja"]);
+edge(s,"M885,244 V232 H1000 V253","g",1,[892,225,"nein (Kleinbetrag)"]);
+edge(s,"M947,387 H1000 V311","b",1);
+edge(s,"M1050,253 V101","g",1,[1044,170,"Freigabe-Mitteilung","end"]);
+node(s,"s1",0,220,["Digitaler Antrag","Pflichtfelder,","KI-Kategorie"],"grn");
+node(s,"s2",1,345,["Teamleitung prüft","Frist, Erinnerung"],"blu");
+node(s,"sd2",1,480,["Rückfrage","nötig?"],"",1);
+node(s,"s3",2,610,["Budget-Vorprüfung","(feste Regel)"],"grn");
+node(s,"sd3",2,750,["Budget","vorhanden?"],"grn",1);
+node(s,"sb",3,750,["Budgetanfrage","an die GF"],"blu");
+node(s,"sd4",2,885,["Betrag über","2.000 €?"],"grn",1);
+node(s,"s4",3,885,["Freigabe der GF","über 2.000 €"],"blu");
+node(s,"s5",2,1025,["Mitteilung","und Ablage"],"grn");
+node(s,"s6",0,1025,["Bestellen","(Ausblick: auto)"],"dsh");
+var sg=el("g",{class:"node grn",tabindex:"0","data-id":"sbx",role:"button","aria-label":"Statusanzeige"},s);el("rect",{x:138,y:450,width:800,height:30,rx:8,class:"main"},sg);el("rect",{x:138,y:450,width:9,height:30,rx:4,class:"bar"},sg);el("text",{x:538,y:470},sg).textContent="Statusanzeige für alle: Die antragstellende Person sieht, wo ihr Antrag liegt"}
+drawIst();drawSoll();
+wire(document.getElementById("svgIst"),document.getElementById("detIst"));
+wire(document.getElementById("svgSoll"),document.getElementById("detSoll"));
+function addHint(svgId,detId,id){var s=document.getElementById(svgId),g=s.querySelector('.node[data-id="'+id+'"]');var b=g.querySelector(".main").getBBox();var r=el("rect",{x:b.x-4,y:b.y-4,width:b.width+8,height:b.height+8,rx:10,class:"hintring"},s);s.querySelectorAll(".node").forEach(function(n){n.addEventListener("click",function(){if(r.parentNode)r.parentNode.removeChild(r)},{once:true})});showDet(s,document.getElementById(detId),id)}
+function initHints(){if(!document.getElementById("svgIst").getBoundingClientRect().width)return false;return true}
+var hintDone={ist:0,soll:0};
+function hintFor(id){if(id==="ist"&&!hintDone.ist){hintDone.ist=1;addHint("svgIst","detIst","i1")}if(id==="soll"&&!hintDone.soll){hintDone.soll=1;addHint("svgSoll","detSoll","s1")}}
+document.getElementById("playIst").addEventListener("click",function(){play("svgIst","detIst","playIst",["i1","i2","id2","i3","id3","id4","i4","i5","i6","ib"],"<h4>Ergebnis des Durchlaufs</h4><p>Im Schnitt <b>9 Arbeitstage</b> von Antrag bis Freigabe, davon nur etwa <b>45 Minuten</b> Bearbeitung. Der Rest ist Liegezeit. Rund jeder vierte Antrag kommt mindestens einmal zurück.</p>")});
+document.getElementById("playSoll").addEventListener("click",function(){play("svgSoll","detSoll","playSoll",["s1","s2","sd2","s3","sd3","sd4","s4","s5","s6","sbx"],"<h4>Ergebnis des Durchlaufs</h4><p>Hauspost, Scan und Ausdruck entfallen. Feste Regeln übernehmen die Routine, <b>eine KI-Stelle</b> hilft bei der Begründung, <b>vier menschliche Kontrollpunkte</b> bleiben. Die Wirkung ist noch nicht gemessen, Zielwerte nennt das Szenario nicht.</p>")});
+var OPT=[
+["1 Formular ausfüllen und ausdrucken",["ent|Ausdruck entfällt","ver|Pflichtfelder","aut|Feste Regel + KI-Kategorie"],"Der Ausdruck startet die Papierkette. Pflichtfelder (Begründung, Kostenstelle als Auswahl) verhindern die Fehler, wegen derer jeder vierte Antrag zurückkommt. Eine einfache Regel reicht, die KI nur bei der Begründungskategorie."],
+["2 Teamleitung prüft und unterschreibt",["man|Bleibt manuell","ver|Frist, Erinnerung"],"Genehmigungsstufe bleibt beim Menschen. Statt Fach: digitale Benachrichtigung, feste Prüffrist, automatische Erinnerung. Eine Vertretung ist ein Vorschlag, das Szenario nennt keine."],
+["Rücksprache nötig?",["ver|Digital im Antrag"],"Rückfragen bleiben nachvollziehbar, ohne dass Papier wandert."],
+["3 Hauspost und Budgetprüfung",["ent|Hauspost entfällt","aut|Vorprüfung per Regel","man|Finanzen bei Auffälligkeit"],"Die Budgetprüfung muss bleiben, kann aber früher und schneller laufen. Sie startet schon beim Einreichen, parallel zur Teamleitung (Annahme: Budgetdaten digital verfügbar)."],
+["Budget fehlt",["man|Teamleitung fragt Geschäftsführung"],"Ergänzung von Ahmet: Fehlt das Budget, fragt die Teamleitung direkt bei der Geschäftsführung an, frühestens ab dem Zeitpunkt, an dem das feststeht."],
+["Betrag über 2.000 €?",["aut|Feste Regel"],"Die Regel ist eindeutig und braucht keine KI."],
+["4 Geschäftsführung unterschreibt",["man|Bleibt manuell (Pflicht)","ver|Digitale Vorlage"],"Vorgabe der Geschäftsführung: Über 2.000 € genehmigt ein Mensch final."],
+["5 Scannen und E-Mail",["ent|Scan entfällt","aut|Automatische Mitteilung"],"Den Scan gibt es nur wegen des Papiers. Die Freigabe-Mitteilung ist eine Standardnachricht, der Antrag bleibt im Tool abgelegt."],
+["6 Bestellen",["man|Bleibt bei der antragstellenden Person"],"Variante A mit Ausblick auf B (automatische Bestellung, wenn Anbindung und Lieferant vorhanden sind)."],
+["Status für alle",["aut|Statusanzeige"],"Die antragstellende Person sieht jederzeit, wo ihr Antrag liegt. Das beendet die Blackbox."]];
+var cur="alle";
+function drawOpt(){var tb=document.querySelector("#optTable tbody");tb.innerHTML="";OPT.forEach(function(r){var tags=r[1].map(function(x){var p=x.split("|");return{k:p[0],t:p[1]}});if(cur!=="alle"&&!tags.some(function(t){return t.k===cur}))return;var tr=document.createElement("tr");tr.innerHTML="<td><b>"+esc(r[0])+"</b></td><td>"+tags.map(function(t){return'<span class="tg t-'+t.k+'">'+esc(t.t)+"</span>"}).join("")+"</td><td>"+esc(r[2])+"</td>";tb.appendChild(tr)})}
+var F=document.getElementById("filters");[["alle","Alle"],["ent","Entfällt"],["ver","Vereinfacht"],["aut","Automatisiert"],["man","Bleibt manuell"]].forEach(function(f){var b=document.createElement("button");b.textContent=f[1];b.className=f[0]===cur?"on":"";b.onclick=function(){cur=f[0];F.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");drawOpt()};F.appendChild(b)});drawOpt();
+var KP=[
+["Durchlaufzeit","Tempo","9 Arbeitstage","Zeitpunkt „Antrag eingereicht“ und „Freigabe bei der antragstellenden Person“. Nachher aus dem Workflow-Tool, vorher aus Formulardatum und Freigabe-E-Mail (Stichprobe).","Wartezeit verursacht keine Personalkosten, deshalb nicht direkt in Euro umrechenbar. Die Kosten steckt der Bearbeitungsaufwand.","Es wird schnell genehmigt, ohne genau zu prüfen. Oder ein zurückgegebener Antrag wird als „neuer Antrag“ gestartet, damit die Uhr neu beginnt.","Immer mit der Rückläuferquote zusammen lesen. Nach einer Rückfrage zählt es als derselbe Vorgang weiter."],
+["Bearbeitungsaufwand pro Antrag","Tempo und Kosten","≈ 45 Minuten","Arbeitszeit der Beteiligten pro Antrag, aus dem Workflow-Tool und Stichproben.","Minuten pro Antrag ÷ 60 × Stundensatz × Zahl der Anträge. Stundensatz und Zahl der Anträge sind nicht im Szenario.","Aufwand wird nur verlagert, zum Beispiel von Finanzen auf die Antragstellenden, statt wirklich eingespart. Oder es wird auf Kosten der Sorgfalt Zeit gespart.","Den Gesamtaufwand über alle Beteiligten messen, immer mit der Rückläuferquote zusammen lesen."],
+["Rückläuferquote","Qualität und Kosten","≈ 25 %","Anträge mit Rückfrage geteilt durch alle Anträge im Zeitraum, nachher aus dem Verlauf im Tool.","Rückläufer × Zusatzminuten je Rücklauf ÷ 60 × Stundensatz. Zusatzminuten sind nicht im Szenario.","Die Teamleitung genehmigt unvollständige Anträge statt sie zurückzugeben. Rückfragen laufen mündlich außerhalb des Tools. Pflichtfelder werden mit Platzhaltern gefüllt.","Rückfragen verbindlich im Tool erfassen. Stichprobe, ob Begründungen wirklich aussagekräftig sind."],
+["Zufriedenheit","Qualität","noch offen","Anonyme Kurzumfrage vor der Einführung und danach (z. B. Skala 1 bis 5, Frage „Ich weiß, wo mein Antrag liegt“).","Kaum direkt in Euro. Indirekt über die Zeit für Nachfragen (Vorschlag: Statusnachfragen mitzählen).","Nur Zufriedene antworten, oder Werte werden beschönigt, wenn Druck auf gute Ergebnisse besteht.","Anonym befragen, Rücklaufquote ausweisen, Freitext zulassen."]];
+var KT=document.getElementById("ktiles"),DK=document.getElementById("detK");
+KP.forEach(function(k,i){var b=document.createElement("button");b.className="ktile";b.innerHTML='<span class="big">'+esc(k[2])+'</span><b>'+esc(k[0])+'</b><br><span class="l">'+esc(k[1])+"</span>";b.onclick=function(){KT.querySelectorAll(".ktile").forEach(function(x){x.classList.remove("sel")});b.classList.add("sel");DK.innerHTML="<h4>"+esc(k[0])+" · "+esc(k[1])+"</h4><p><b>Vorher (Ausgangswert):</b> "+esc(k[2])+" · <b>Nachher:</b> noch zu messen</p><p><b>Daten und Quelle:</b> "+esc(k[3])+"</p><p><b>Euro-Rechnung:</b> "+esc(k[4])+"</p><p><b>Möglicher Fehlanreiz:</b> "+esc(k[5])+"</p><p><b>Gegenmaßnahme:</b> "+esc(k[6])+"</p>"};KT.appendChild(b)});
+var PF=document.getElementById("pf"),TL=document.getElementById("tl"),pcur="alle";
+function drawP(){TL.innerHTML="";PROMPTS.forEach(function(p){var rv=p.id.charAt(0)==="R";if(pcur==="prompt"&&rv)return;if(pcur==="review"&&!rv)return;var d=document.createElement("details");d.innerHTML='<summary><span class="tg '+(rv?"t-ver":"t-man")+'">'+esc(p.nr)+'</span>'+esc(p.titel)+' <span class="pill" style="margin-left:auto">'+esc(p.status)+'</span></summary><div class="in"><p>'+esc(p.kurz)+'</p><p><b>Ergebnis:</b> '+esc(p.ergebnis)+'</p><p><b>Wortlaut (Spracheingabe, unverändert):</b></p><p class="q">'+esc(p.wort)+'</p></div>';TL.appendChild(d)})}
+[["alle","Alle"],["prompt","Prompts von Ahmet"],["review","Reviews von Ahmet"]].forEach(function(f){var b=document.createElement("button");b.textContent=f[1];b.className=f[0]===pcur?"on":"";b.onclick=function(){pcur=f[0];PF.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on");drawP()};PF.appendChild(b)});drawP();
+var red=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function runCount(){document.querySelectorAll("[data-count]").forEach(function(e){var to=+e.getAttribute("data-count");if(red){e.textContent=to;return}var t0=null;function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1100);e.textContent=Math.round(to*k);if(k<1)requestAnimationFrame(step)}requestAnimationFrame(step);setTimeout(function(){e.textContent=to},1500)})}
+var TH=document.getElementById("theme");
+function setTheme(m){var r=document.documentElement;if(m==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",m);try{localStorage.setItem("m11theme",m)}catch(e){}TH.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-m")===m)})}
+var TI={light:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',dark:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',auto:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>'};
+[["light","Hell"],["dark","Dunkel"],["auto","Automatisch (wie das Gerät)"]].forEach(function(x){var b=document.createElement("button");b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TI[x[0]]+'</svg>';b.title=x[1];b.setAttribute("aria-label",x[1]);b.setAttribute("data-m",x[0]);b.onclick=function(){setTheme(x[0])};TH.appendChild(b)});
+var qm=(location.search.match(/theme=(light|dark|auto)/)||[])[1];var sm=null;try{sm=localStorage.getItem("m11theme")}catch(e){}
+setTheme(qm||sm||"auto");
+go(location.hash.replace("#","")||"start");
+</script>
+</body>
+</html>
